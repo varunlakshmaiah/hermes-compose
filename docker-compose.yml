@@ -23,7 +23,16 @@ services:
       # Dokploy/Traefik will route traffic internally without needing public host ports.
       - "127.0.0.1:9119:9119" # Agent Dashboard
       - "127.0.0.1:8765:8765" # Gateway HTTP port for webhooks
+    networks:
+      - dokploy-network
+      - default
 
 volumes:
   # Managed persistent storage
   hermes-data:
+
+networks:
+  # Required for Dokploy's Traefik reverse proxy to route domains
+  # (Local Mac/PC users: comment out these 3 lines and the 'dokploy-network' above if it crashes locally)
+  dokploy-network:
+    external: true
