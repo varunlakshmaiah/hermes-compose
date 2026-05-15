@@ -41,9 +41,19 @@ If you want to test the Agent locally on your machine before pushing to Dokploy:
    ```bash
    cp .env.example .env
    ```
-2. Fill in your API keys in the `.env` file.
-3. Start the containers (note: you may need to temporarily remove the `dokploy-network` external requirement from `docker-compose.yml` if you aren't running Traefik locally):
+4. Fill in your API keys in the `.env` file.
+5. Start the containers:
    ```bash
    docker compose up -d
    ```
-4. Access the dashboard at `http://localhost:9119`.
+6. Access the dashboard at `http://localhost:9119`.
+
+### Testing Webhooks Locally
+
+If you are developing locally on your laptop, external platforms (like Telegram or Discord) cannot send webhooks to your local `8765` port. 
+
+To solve this, use a free secure tunnel like [Ngrok](https://ngrok.com/):
+1. Install Ngrok.
+2. Run `ngrok http 8765` in your terminal.
+3. Ngrok will give you a public URL (e.g., `https://xyz123.ngrok.app`).
+4. Provide this URL to your webhook providers!
