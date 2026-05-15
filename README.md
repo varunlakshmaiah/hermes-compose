@@ -1,6 +1,16 @@
-# 🚀 Deploy Hermes AI Agent: Zero-Friction Docker Compose Setup
+<p align="center">
+  <img src="assets/banner.png" alt="Hermes AI Agent Banner" width="100%">
+</p>
 
-Welcome to the easiest way to self-host the **NousResearch Hermes Agent** and **Hermes Gateway**. 
+<h1 align="center">🚀 Hermes AI Agent: Zero-Friction Deployment</h1>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker">
+  <img src="https://img.shields.io/badge/Dokploy-Optimized-000000?style=for-the-badge&logo=linux&logoColor=white" alt="Dokploy">
+  <img src="https://img.shields.io/badge/Open%20Source-%E2%9D%A4-FF69B4?style=for-the-badge" alt="Open Source">
+</p>
+
+Welcome to the easiest, most professional way to self-host the **NousResearch Hermes Agent** and **Hermes Gateway**. 
 
 If you are looking to build, run, and scale your own autonomous AI agent using powerful LLMs (like OpenRouter, OpenAI, or Anthropic), you are in the right place. This repository provides a production-ready, fully optimized Docker Compose template designed for lightning-fast deployments on platforms like [Dokploy](https://dokploy.com/), VPS environments, or your local machine.
 
