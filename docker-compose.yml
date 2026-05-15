@@ -18,16 +18,12 @@ services:
       - HERMES_DASHBOARD=1
       - HERMES_ALLOW_ROOT_GATEWAY=1
     ports:
-      - "9119:9119" # Agent Dashboard
-      - "8765:8765" # Gateway HTTP port for webhooks
-    networks:
-      - dokploy-network
+      # Bound to 127.0.0.1 for security! This prevents public access on a VPS.
+      # Local users can still access it at localhost:9119.
+      # Dokploy/Traefik will route traffic internally without needing public host ports.
+      - "127.0.0.1:9119:9119" # Agent Dashboard
+      - "127.0.0.1:8765:8765" # Gateway HTTP port for webhooks
 
 volumes:
-  # Dokploy automatically manages and backs up named volumes
+  # Managed persistent storage
   hermes-data:
-
-networks:
-  # Connects the container to Dokploy's Traefik reverse proxy
-  dokploy-network:
-    external: true
