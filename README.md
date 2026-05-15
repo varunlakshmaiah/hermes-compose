@@ -81,4 +81,14 @@ To solve this, developers use a free secure tunnel like [Ngrok](https://ngrok.co
 4. Paste this URL into your Telegram or Discord bot settings to start receiving messages locally!
 
 ---
+
+## 📚 Useful Links & Resources
+
+*   [**NousResearch Hermes Official Repo**](https://github.com/NousResearch/Hermes) - The core agent codebase.
+*   [**Dokploy Official Website**](https://dokploy.com/) - The easiest self-hosted PaaS.
+*   [**Hostinger VPS Hosting**](https://www.hostinger.com/vps-hosting) - Affordable, reliable virtual private servers for hosting Dokploy.
+*   [**OpenRouter**](https://openrouter.ai/) - Get API keys for top-tier LLMs to power your agent.
+*   [**Ngrok**](https://ngrok.com/) - Essential tunneling for local webhook testing.
+
+---
 *Built for the open-source community to make self-hosting AI agents accessible to everyone.*
