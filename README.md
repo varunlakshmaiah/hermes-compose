@@ -52,6 +52,21 @@ If you want to access your Agent Dashboard or receive webhooks from Discord/Tele
 
 ---
 
+## 🔒 Security & Privacy (Important!)
+
+This template is configured with security in mind to prevent unauthorized access and configuration headaches.
+
+### 1. The Gateway Allowlist (Who can talk to your bot?)
+By default, the `.env.example` includes `GATEWAY_ALLOW_ALL_USERS=true`, which means **anyone** who finds your Telegram/Discord bot can talk to it and consume your API credits. 
+* **To make your bot private:** Delete that line in your `.env` and replace it with `TELEGRAM_ALLOWED_USERS=<your_telegram_id>`. The agent will then go into lockdown and completely ignore messages from strangers. (You can find your numeric Telegram ID by messaging `@userinfobot`).
+
+### 2. Webhooks vs. Long-Polling
+This repository is deliberately optimized for **Long-Polling**. You only need to provide your `TELEGRAM_BOT_TOKEN`, and the agent will securely reach out to Telegram to pull messages. 
+* **Why this is better:** It completely bypasses Cloudflare firewalls (Bot Fight Mode) and prevents you from needing to expose public webhooks. 
+* **Warning:** If you explicitly define a `TELEGRAM_WEBHOOK_URL`, Hermes will enforce strict security and **intentionally crash the gateway** unless you also provide a `TELEGRAM_WEBHOOK_SECRET` to prevent forged requests. We highly recommend sticking to Long-Polling by simply leaving the webhook URL empty!
+
+---
+
 ## 💻 Local AI Development Guide
 
 Want to test your AI agent locally on your Mac, Windows, or Linux machine before pushing it to the cloud? It's incredibly simple.
