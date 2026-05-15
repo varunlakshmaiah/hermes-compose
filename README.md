@@ -61,11 +61,18 @@ Want to test your AI agent locally on your Mac, Windows, or Linux machine before
    cp .env.example .env
    ```
 2. Open the `.env` file and drop in your API keys (like OpenRouter or OpenAI).
-3. Spin up the local environment using Docker Compose:
+3. **Important Note for Local Testing:** This repository is optimized for Dokploy, which requires the `dokploy-network`. If you are running this locally without Dokploy/Traefik, Docker will throw a "network not found" error. 
+   Simply open `docker-compose.yml` and comment out the `dokploy-network` blocks before running:
+   ```yaml
+   # networks:
+   #   dokploy-network:
+   #     external: true
+   ```
+4. Spin up the local environment using Docker Compose:
    ```bash
    docker compose up -d
    ```
-4. Access your beautiful new AI Dashboard by visiting: `http://localhost:9119`
+5. Access your beautiful new AI Dashboard by visiting: `http://localhost:9119`
 
 ### 🔗 Testing Webhooks Locally
 
