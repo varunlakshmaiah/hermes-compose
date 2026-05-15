@@ -2,6 +2,7 @@ services:
   hermes:
     image: nousresearch/hermes-agent:latest
     container_name: hermes
+    command: gateway
     restart: unless-stopped
     tty: true
     stdin_open: true
