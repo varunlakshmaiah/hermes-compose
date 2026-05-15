@@ -67,6 +67,51 @@ This repository is deliberately optimized for **Long-Polling**. You only need to
 
 ---
 
+## 🛠️ Running Hermes Commands (Setup, Status, Doctor, etc.)
+
+Once your container is running, you may want to run Hermes CLI commands like `hermes setup`, `hermes status`, or `hermes doctor`. Because Hermes runs inside a Python virtual environment within the container, you can't just type `hermes setup` directly — you need to activate the environment first.
+
+### Option 1: Use the Helper Script (Easiest)
+
+We include a [`hermes-exec.sh`](hermes-exec.sh) script that handles everything for you:
+
+```bash
+# Run the interactive setup wizard
+./hermes-exec.sh setup
+
+# Check the status of all components
+./hermes-exec.sh status
+
+# Run diagnostics
+./hermes-exec.sh doctor
+
+# Open an interactive shell (venv pre-activated, run multiple commands)
+./hermes-exec.sh
+```
+
+### Option 2: Dokploy Terminal
+
+If you're on Dokploy, open the **Terminal** tab for your Hermes container and run:
+
+```bash
+source /opt/hermes/.venv/bin/activate
+hermes setup
+```
+
+Once activated, you can run as many `hermes` commands as you like in that session without repeating the `source` line.
+
+### Option 3: SSH + Docker Exec
+
+If you SSH into your VPS directly:
+
+```bash
+docker exec -it hermes bash -c 'source /opt/hermes/.venv/bin/activate && hermes setup'
+```
+
+> **⚠️ Why is this needed?** The container's entrypoint activates the virtual environment automatically when it starts the gateway. But when you open a *new* shell session (via Dokploy terminal or `docker exec`), you get a fresh shell where the venv isn't active yet. The `source` command activates it so the `hermes` executable is found on your PATH.
+
+---
+
 ## 💻 Local AI Development Guide
 
 Want to test your AI agent locally on your Mac, Windows, or Linux machine before pushing it to the cloud? It's incredibly simple.
