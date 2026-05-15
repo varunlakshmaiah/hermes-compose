@@ -123,25 +123,127 @@ docker exec -it hermes bash -c 'source /opt/hermes/.venv/bin/activate && hermes 
 ```
 Replace `hermes setup` with any command (`status`, `doctor`, `config`, etc.).
 
-### Helper Script (For Local Development / VPS SSH)
+### 📜 Helper Script: `hermes-exec.sh` (Detailed Guide)
 
-> **Note:** This script runs **on the host machine** (your laptop, or your VPS via SSH). It is not available inside the container — it uses `docker exec` to reach into the running container for you.
+We include a [`hermes-exec.sh`](hermes-exec.sh) convenience script that automates the virtual environment activation for you. It runs **on the host machine** (not inside the container) and uses `docker exec` under the hood.
 
-We include a [`hermes-exec.sh`](hermes-exec.sh) script that wraps the activation step automatically:
+> **⚠️ This script is NOT available inside the container.** It must be run from a machine that has Docker access and can see the running `hermes` container.
 
-```bash
-# Run the interactive setup wizard
-./hermes-exec.sh setup
+#### Prerequisites (All Environments)
+- Docker must be installed and running.
+- The Hermes container must be up (`docker compose up -d` should have been run).
+- The script must be executable: `chmod +x hermes-exec.sh` (already done if you cloned this repo).
 
-# Check the status of all components
-./hermes-exec.sh status
+---
 
-# Run diagnostics
-./hermes-exec.sh doctor
+#### Environment 1: Local Machine (Mac / Windows / Linux)
 
-# Open an interactive shell (venv pre-activated, run multiple commands)
-./hermes-exec.sh
-```
+Use this when you are running Hermes locally on your development machine via Docker Desktop.
+
+1. Clone this repository (if you haven't already):
+   ```bash
+   git clone https://github.com/varunlakshmaiah/hermes-compose.git
+   cd hermes-compose
+   ```
+2. Start the Hermes container:
+   ```bash
+   docker compose up -d
+   ```
+3. Use the helper script to run any Hermes command:
+   ```bash
+   # Run the interactive setup wizard
+   ./hermes-exec.sh setup
+
+   # Check all components
+   ./hermes-exec.sh status
+
+   # Run diagnostics
+   ./hermes-exec.sh doctor
+
+   # View/edit configuration
+   ./hermes-exec.sh config
+
+   # Select default model and provider
+   ./hermes-exec.sh model
+   ```
+4. Or open a full interactive shell (venv pre-activated, run multiple commands):
+   ```bash
+   ./hermes-exec.sh
+   ```
+   You'll be dropped into a bash shell inside the container where `hermes` is ready to use. Type `exit` to leave.
+
+---
+
+#### Environment 2: VPS via SSH (Ubuntu, Debian, etc.)
+
+Use this when Hermes is running on a remote server and you connect via SSH.
+
+1. SSH into your VPS:
+   ```bash
+   ssh root@your-vps-ip
+   ```
+2. Navigate to the cloned repository on the server:
+   ```bash
+   cd /path/to/hermes-compose
+   ```
+   > **Tip:** If you deployed via Dokploy and never manually cloned the repo on the server, you can copy just the script:
+   > ```bash
+   > curl -O https://raw.githubusercontent.com/varunlakshmaiah/hermes-compose/main/hermes-exec.sh
+   > chmod +x hermes-exec.sh
+   > ```
+3. Run commands:
+   ```bash
+   ./hermes-exec.sh setup
+   ./hermes-exec.sh status
+   ./hermes-exec.sh doctor
+   ```
+4. If your container has a custom name (not `hermes`), use the environment variable:
+   ```bash
+   HERMES_CONTAINER=my-custom-name ./hermes-exec.sh status
+   ```
+
+---
+
+#### Environment 3: Dokploy-Deployed Server
+
+If Hermes was deployed via Dokploy's Compose service, the repo files **are not** on the VPS filesystem in a standard location. You have two choices:
+
+**Choice A — Download just the script via SSH:**
+1. SSH into your Dokploy VPS:
+   ```bash
+   ssh root@your-vps-ip
+   ```
+2. Download the helper script:
+   ```bash
+   curl -O https://raw.githubusercontent.com/varunlakshmaiah/hermes-compose/main/hermes-exec.sh
+   chmod +x hermes-exec.sh
+   ```
+3. Run it:
+   ```bash
+   ./hermes-exec.sh setup
+   ./hermes-exec.sh status
+   ```
+
+**Choice B — Use Dokploy Terminal directly (no script needed):**
+
+If you prefer not to SSH, use Dokploy's built-in terminal as described in the [Dokploy steps above](#for-dokploy-compose-deployments-step-by-step).
+
+---
+
+#### Available Commands Reference
+
+| Command | What it does |
+|---|---|
+| `./hermes-exec.sh setup` | Interactive first-time setup wizard |
+| `./hermes-exec.sh status` | Show status of all components |
+| `./hermes-exec.sh doctor` | Run diagnostics and health checks |
+| `./hermes-exec.sh config` | View or edit configuration |
+| `./hermes-exec.sh model` | Select default LLM model/provider |
+| `./hermes-exec.sh gateway` | Gateway management |
+| `./hermes-exec.sh logs` | View agent logs |
+| `./hermes-exec.sh skills` | Manage installed skills |
+| `./hermes-exec.sh memory` | Manage agent memory |
+| `./hermes-exec.sh` | Open interactive shell (run multiple commands) |
 
 ---
 
