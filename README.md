@@ -69,11 +69,65 @@ This repository is deliberately optimized for **Long-Polling**. You only need to
 
 ## 🛠️ Running Hermes Commands (Setup, Status, Doctor, etc.)
 
-Once your container is running, you may want to run Hermes CLI commands like `hermes setup`, `hermes status`, or `hermes doctor`. Because Hermes runs inside a Python virtual environment within the container, you can't just type `hermes setup` directly — you need to activate the environment first.
+After your Hermes container is deployed and running, you will likely need to run CLI commands like `hermes setup`, `hermes status`, or `hermes doctor`. This section explains exactly how to do that.
 
-### Option 1: Use the Helper Script (Easiest)
+> **⚠️ Important:** The `hermes` command lives inside a Python virtual environment within the container. When you open a new shell session, the venv is **not** automatically activated — so typing `hermes` directly will give you `command not found`. You must activate it first with a single `source` command (shown below).
 
-We include a [`hermes-exec.sh`](hermes-exec.sh) script that handles everything for you:
+### For Dokploy Compose Deployments (Step-by-Step)
+
+Since this project deploys as a **Compose** service on Dokploy, the Terminal tab may not always be directly visible. Here is how to access your container:
+
+#### Method A: Via Dokploy UI
+1. Log into your **Dokploy Dashboard**.
+2. Open your **Compose project** from the sidebar.
+3. Navigate to the **Advanced** tab → look for a **Terminal** option.
+4. If a terminal opens, you are now inside the container. Run:
+   ```bash
+   source /opt/hermes/.venv/bin/activate
+   ```
+5. You now have full access to all `hermes` commands:
+   ```bash
+   hermes setup       # Interactive setup wizard
+   hermes status      # Check all components
+   hermes doctor      # Run diagnostics
+   hermes config      # View/edit configuration
+   hermes model       # Select default model/provider
+   hermes gateway     # Gateway management
+   ```
+   > You only need to run the `source` line **once** per terminal session.
+
+#### Method B: Via SSH into your VPS (Recommended if Terminal tab is unavailable)
+1. SSH into your VPS:
+   ```bash
+   ssh root@your-vps-ip
+   ```
+2. Open a shell inside the running Hermes container:
+   ```bash
+   docker exec -it hermes bash
+   ```
+3. Activate the Hermes environment:
+   ```bash
+   source /opt/hermes/.venv/bin/activate
+   ```
+4. Run any command you need:
+   ```bash
+   hermes setup
+   hermes status
+   hermes doctor
+   ```
+
+#### Method B (One-Liner Shortcut)
+If you just need to run a single command quickly via SSH:
+```bash
+docker exec -it hermes bash -c 'source /opt/hermes/.venv/bin/activate && hermes setup'
+```
+Replace `hermes setup` with any command (`status`, `doctor`, `config`, etc.).
+
+### Helper Script (For Local Development / VPS SSH)
+
+> **Note:** This script runs **on the host machine** (your laptop, or your VPS via SSH). It is not available inside the container — it uses `docker exec` to reach into the running container for you.
+
+We include a [`hermes-exec.sh`](hermes-exec.sh) script that wraps the activation step automatically:
 
 ```bash
 # Run the interactive setup wizard
@@ -88,27 +142,6 @@ We include a [`hermes-exec.sh`](hermes-exec.sh) script that handles everything f
 # Open an interactive shell (venv pre-activated, run multiple commands)
 ./hermes-exec.sh
 ```
-
-### Option 2: Dokploy Terminal
-
-If you're on Dokploy, open the **Terminal** tab for your Hermes container and run:
-
-```bash
-source /opt/hermes/.venv/bin/activate
-hermes setup
-```
-
-Once activated, you can run as many `hermes` commands as you like in that session without repeating the `source` line.
-
-### Option 3: SSH + Docker Exec
-
-If you SSH into your VPS directly:
-
-```bash
-docker exec -it hermes bash -c 'source /opt/hermes/.venv/bin/activate && hermes setup'
-```
-
-> **⚠️ Why is this needed?** The container's entrypoint activates the virtual environment automatically when it starts the gateway. But when you open a *new* shell session (via Dokploy terminal or `docker exec`), you get a fresh shell where the venv isn't active yet. The `source` command activates it so the `hermes` executable is found on your PATH.
 
 ---
 
