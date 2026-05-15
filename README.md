@@ -1,59 +1,74 @@
-# Hermes Agent & Gateway Configuration
+# 🚀 Deploy Hermes AI Agent: Zero-Friction Docker Compose Setup
 
-This repository is configured to deploy the official **NousResearch Hermes Agent** and **Hermes Gateway** instantly via [Dokploy](https://dokploy.com/). 
+Welcome to the easiest way to self-host the **NousResearch Hermes Agent** and **Hermes Gateway**. 
 
-## ⚡ Zero-Friction Deployment
+If you are looking to build, run, and scale your own autonomous AI agent using powerful LLMs (like OpenRouter, OpenAI, or Anthropic), you are in the right place. This repository provides a production-ready, fully optimized Docker Compose template designed for lightning-fast deployments on platforms like [Dokploy](https://dokploy.com/), VPS environments, or your local machine.
 
-Traditionally, setting up Hermes involves pulling the image, opening a terminal, and walking through an interactive CLI setup wizard to configure your LLM provider and integrations.
+## ✨ Why Use This Template? (The "Zero-Friction" Promise)
 
-**We have bypassed this completely.** By defining all necessary configurations as environment variables, this repository allows you to deploy a fully functional AI Agent and Gateway in under 3 minutes with zero CLI access required.
+Normally, self-hosting the NousResearch Hermes Docker image requires you to open an SSH terminal, pull the image, and walk through a tedious, interactive CLI setup wizard to configure your LLM provider and integrations.
 
-### Deployment Steps (Dokploy)
+**We’ve completely eliminated the CLI setup wizard.** 
 
-#### Step 1: Create the Project
-1. In your Dokploy dashboard, create a new **Compose Service**.
-2. Connect this GitHub repository.
-
-#### Step 2: Inject the Environment Variables
-1. Go to the **Environment** tab of your Compose service in Dokploy.
-2. Copy the contents of the `.env.example` file from this repository.
-3. Replace the placeholder values with your actual API keys. **You MUST provide at least one LLM Provider key** (e.g., your `OPENROUTER_API_KEY` or `OPENAI_API_KEY`).
-4. Click **Save**.
-
-#### Step 3: Set up Domains (Optional)
-If you want to access the Dashboard or the Gateway webhooks via the internet:
-1. Go to the **Domains** tab.
-2. Point your custom domain (e.g., `dashboard.yourdomain.com`) to port `9119` (Dashboard).
-3. Point another domain (e.g., `gateway.yourdomain.com`) to port `8765` (Gateway Webhooks).
-4. Dokploy will automatically generate free Let's Encrypt SSL certificates.
-
-#### Step 4: Deploy
-1. Click **Deploy**. Dokploy will pull the official `nousresearch/hermes-agent:latest` image and start it up. 
-2. The agent will read your environment variables, automatically skip the CLI wizard, and initialize your connections!
+By defining all configurations as environment variables, this repository allows you to achieve a **frictionless LLM agent deployment**. Whether you're a seasoned DevOps engineer or a beginner, you can have a fully functional AI Agent and Gateway running in under 3 minutes. Just paste your API keys and hit deploy!
 
 ---
 
-## 🛠️ Local Development
+## ☁️ How to Deploy on Dokploy (or any VPS)
 
-If you want to test the Agent locally on your machine before pushing to Dokploy:
+Deploying the Hermes Agent on a cloud server guarantees it stays online 24/7 to answer messages, process data, and respond to webhooks. Here is the step-by-step guide for Dokploy:
 
-1. Copy the `.env.example` file to `.env`:
+### Step 1: Create the Project
+1. Log into your Dokploy dashboard and create a new **Compose Service**.
+2. Connect this GitHub repository.
+
+### Step 2: Inject Your Environment Variables
+1. Navigate to the **Environment** tab of your Compose service in Dokploy.
+2. Copy the contents of the `.env.example` file provided in this repository.
+3. Paste the variables into Dokploy and replace the placeholder values with your actual API keys. 
+   > **Note:** You MUST provide at least one LLM Provider key (e.g., your `OPENROUTER_API_KEY` or `OPENAI_API_KEY`) for the agent to have a "brain".
+4. Click **Save**.
+
+### Step 3: Set up Domains for Web Access (Optional)
+If you want to access your Agent Dashboard or receive webhooks from Discord/Telegram via the public internet:
+1. Go to the **Domains** tab in Dokploy.
+2. Point your custom domain (e.g., `dashboard.yourdomain.com`) to port `9119` (The Hermes Dashboard).
+3. Point another domain (e.g., `gateway.yourdomain.com`) to port `8765` (The Hermes Gateway for Webhooks).
+4. Dokploy will automatically generate free Let's Encrypt SSL certificates for you!
+
+### Step 4: Deploy!
+1. Click **Deploy**. 
+2. Dokploy will pull the official `nousresearch/hermes-agent:latest` Docker image. The agent will read your environment variables, bypass the setup wizard entirely, and instantly initialize your database and connections. You're live!
+
+---
+
+## 💻 Local AI Development Guide
+
+Want to test your AI agent locally on your Mac, Windows, or Linux machine before pushing it to the cloud? It's incredibly simple.
+
+1. Clone this repository and copy the example environment file:
    ```bash
    cp .env.example .env
    ```
-4. Fill in your API keys in the `.env` file.
-5. Start the containers:
+2. Open the `.env` file and drop in your API keys (like OpenRouter or OpenAI).
+3. Spin up the local environment using Docker Compose:
    ```bash
    docker compose up -d
    ```
-6. Access the dashboard at `http://localhost:9119`.
+4. Access your beautiful new AI Dashboard by visiting: `http://localhost:9119`
 
-### Testing Webhooks Locally
+### 🔗 Testing Webhooks Locally
 
-If you are developing locally on your laptop, external platforms (like Telegram or Discord) cannot send webhooks to your local `8765` port. 
+If you are developing locally, external platforms (like Telegram or Discord) cannot easily send webhooks to your local `8765` port since your laptop is hidden behind a home router.
 
-To solve this, use a free secure tunnel like [Ngrok](https://ngrok.com/):
-1. Install Ngrok.
-2. Run `ngrok http 8765` in your terminal.
+To solve this, developers use a free secure tunnel like [Ngrok](https://ngrok.com/):
+1. Install Ngrok on your machine.
+2. Run this command in your terminal to tunnel traffic to the Hermes Gateway:
+   ```bash
+   ngrok http 8765
+   ```
 3. Ngrok will give you a public URL (e.g., `https://xyz123.ngrok.app`).
-4. Provide this URL to your webhook providers!
+4. Paste this URL into your Telegram or Discord bot settings to start receiving messages locally!
+
+---
+*Built for the open-source community to make self-hosting AI agents accessible to everyone.*
