@@ -1,0 +1,33 @@
+services:
+  hermes:
+    image: nousresearch/hermes-agent:latest
+    container_name: hermes
+    restart: unless-stopped
+    tty: true
+    stdin_open: true
+    volumes:
+      # Persistent storage for memories, skills, and configuration
+      - hermes-data:/data
+    env_file:
+      - .env
+    environment:
+      # These core variables are hardcoded to ensure the container functions correctly.
+      # Any other variables (API keys, integrations) will be dynamically loaded from the .env file / Dokploy UI!
+      - HERMES_HOME=/data
+      - HERMES_LOG_LEVEL=info
+      - HERMES_DASHBOARD=1
+      - HERMES_ALLOW_ROOT_GATEWAY=1
+    ports:
+      - "9119:9119" # Agent Dashboard
+      - "8765:8765" # Gateway HTTP port for webhooks
+    networks:
+      - dokploy-network
+
+volumes:
+  # Dokploy automatically manages and backs up named volumes
+  hermes-data:
+
+networks:
+  # Connects the container to Dokploy's Traefik reverse proxy
+  dokploy-network:
+    external: true

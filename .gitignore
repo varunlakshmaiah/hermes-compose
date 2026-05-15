@@ -1,0 +1,18 @@
+# Environment variables
+.env
+*.env
+.env.*
+!.env.example
+!hermes-full-reference.env
+
+# MacOS
+.DS_Store
+
+# IDEs / Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Docker
+docker-compose.override.yml
