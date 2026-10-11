@@ -24,6 +24,7 @@ services:
       # Dokploy/Traefik will route traffic internally without needing public host ports.
       - "127.0.0.1:9119:9119" # Agent Dashboard
       - "127.0.0.1:8765:8765" # Gateway HTTP port for webhooks
+      - "127.0.0.1:8642:8642" # OpenAI-compatible API server (needs API_SERVER_KEY)
     networks:
       - dokploy-network
       - default

@@ -46,6 +46,21 @@ If you want to access your Agent Dashboard or receive webhooks from Discord/Tele
 3. Point another domain (e.g., `gateway.yourdomain.com`) to port `8765` (The Hermes Gateway for Webhooks).
 4. Dokploy will automatically generate free Let's Encrypt SSL certificates for you!
 
+### Step 3b: Expose the OpenAI-compatible API (optional)
+Lets apps such as the G1 Companion, Open WebUI or LobeChat use your agent.
+1. In the **Environment** tab set `API_SERVER_ENABLED=true`, `API_SERVER_KEY` (generate with `openssl rand -hex 32`), `API_SERVER_HOST=0.0.0.0` and `API_SERVER_PORT=8642`.
+2. In **Domains**, add `hermes-api.yourdomain.com` → service `hermes`, container port `8642`, HTTPS on (Let's Encrypt). Do **not** use port `9119` (the dashboard).
+3. Deploy, then test:
+   ```bash
+   curl https://hermes-api.yourdomain.com/v1/chat/completions \
+     -H "Authorization: Bearer $API_SERVER_KEY" \
+     -H "Content-Type: application/json" \
+     -d '{"model":"hermes-agent","messages":[{"role":"user","content":"Hello"}]}'
+   ```
+4. In the G1 Companion app choose **Hermes agent**, enter the URL, key and model `hermes-agent`.
+
+> **Security:** the key is the only protection and it grants tool access to the container. Never use plain HTTP over the internet and rotate the key if it leaks.
+
 ### Step 4: Deploy!
 1. Click **Deploy**. 
 2. Dokploy will pull the official `nousresearch/hermes-agent:latest` Docker image. The agent will read your environment variables, bypass the setup wizard entirely, and instantly initialize your database and connections. You're live!
